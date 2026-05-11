@@ -1,0 +1,2111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reserve Living · Andy Thomas · Red Sea Global</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,500;9..144,0,600;9..144,1,300;9..144,1,400;9..144,1,500&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Red Sea Global brand palette — Pearl Cream + Deep Sea Navy + Reef Gold */
+    --dark:          #0B1D2D;   /* Deep Sea Navy */
+    --dark-soft:     #142B3D;
+    --ink:           #1F2A36;
+    --text-mid:      #2C3A48;
+    --grey:          #4A5562;
+    --muted:         #8C95A0;
+
+    --cream:         #F2EBE0;   /* MAIN warm cream */
+    --cream-pale:    #F5EFE6;
+    --cream-soft:    #FAF7F2;   /* Pearl Cream — body bg */
+    --card:          #FFFFFF;
+
+    --border:        #D9CDB8;
+    --border-soft:   #E8DECC;
+
+    --gold:          #8A734D;   /* Reef Gold — Founding tier badge */
+
+    --success:       #4A6741;
+    --danger:        #7A2E1F;
+    --sea:           #2F6B7E;   /* deep teal accent */
+
+    --shadow-sm:     0 1px 2px rgba(11,29,45,0.04);
+    --shadow:        0 2px 10px rgba(11,29,45,0.05);
+    --shadow-md:     0 12px 32px rgba(11,29,45,0.08);
+    --shadow-lg:     0 32px 60px rgba(11,29,45,0.20);
+
+    --radius:        10px;
+    --radius-lg:     16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    background: var(--cream-soft);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* ================ LOGIN ================ */
+  #loginScreen {
+    position: fixed;
+    inset: 0;
+    background: var(--dark);
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    z-index: 1000;
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    overflow: hidden;
+  }
+  #loginScreen.hidden {
+    opacity: 0;
+    transform: scale(1.02);
+    pointer-events: none;
+  }
+  .login-hero {
+    position: relative;
+    padding: 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #0B1D2D 0%, #142B3D 50%, #1A3548 100%);
+    overflow: hidden;
+  }
+  .login-hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(242,235,224,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(242,235,224,0.025) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+  .login-hero::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 70% 30%, rgba(138,115,77,0.18) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .login-hero-logo {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .login-hero-logo img {
+    height: 72px;
+    width: auto;
+    filter: brightness(0) invert(1);
+  }
+  .login-hero-logo .fallback {
+    font-family: 'Fraunces', serif;
+    color: var(--cream);
+    font-size: 18px;
+    letter-spacing: 6px;
+    font-weight: 400;
+  }
+  .login-hero-copy {
+    position: relative;
+    max-width: 480px;
+  }
+  .login-hero-eyebrow {
+    font-size: 10px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--cream);
+    margin-bottom: 18px;
+    font-weight: 500;
+    opacity: 0.85;
+  }
+  .login-hero-copy h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 46px;
+    line-height: 1.08;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+  }
+  .login-hero-copy h2 em {
+    font-style: italic;
+    color: var(--cream);
+    font-weight: 300;
+  }
+  .login-hero-copy p {
+    color: rgba(255,255,255,0.6);
+    font-size: 14px;
+    line-height: 1.65;
+  }
+  .login-hero-foot {
+    position: relative;
+    font-size: 11px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+  }
+
+  .login-form-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    background: var(--cream-soft);
+    overflow-y: auto;
+  }
+  .login-card {
+    width: 100%;
+    max-width: 380px;
+    animation: loginFadeUp 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes loginFadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .login-card h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 300;
+    font-size: 32px;
+    color: var(--dark-soft);
+    line-height: 1.15;
+    margin-bottom: 6px;
+    letter-spacing: -0.4px;
+  }
+  .login-card h1 em {
+    font-style: italic;
+    color: var(--dark-soft);
+    font-weight: 400;
+  }
+  .login-sub {
+    color: var(--grey);
+    font-size: 13px;
+    margin-bottom: 30px;
+  }
+  .login-field { margin-bottom: 14px; }
+  .login-field label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    margin-bottom: 6px;
+  }
+  .login-field input {
+    width: 100%;
+    height: 46px;
+    padding: 0 16px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    color: var(--ink);
+    transition: border-color 0.2s;
+  }
+  .login-field input:focus {
+    outline: none;
+    border-color: var(--dark);
+  }
+  .login-btn {
+    width: 100%;
+    height: 48px;
+    background: var(--dark);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    margin-top: 14px;
+    transition: background 0.2s;
+  }
+  .login-btn:hover { background: var(--dark-soft); }
+  .login-divider {
+    text-align: center;
+    color: var(--muted);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 22px 0 14px;
+    position: relative;
+  }
+  .login-divider::before,
+  .login-divider::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 38%;
+    height: 1px;
+    background: var(--border-soft);
+  }
+  .login-divider::before { left: 0; }
+  .login-divider::after  { right: 0; }
+
+  .login-btn-alt {
+    width: 100%;
+    height: 46px;
+    background: #fff;
+    color: var(--dark);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.2s;
+  }
+  .login-btn-alt:hover { background: var(--cream-pale); }
+  .ksa-flag {
+    display: inline-block;
+    width: 18px;
+    height: 12px;
+    background: #006C35;
+    border-radius: 1px;
+  }
+  .login-foot {
+    margin-top: 26px;
+    text-align: center;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .login-foot a { color: var(--dark); text-decoration: none; font-weight: 500; }
+  .login-foot a:hover { text-decoration: underline; }
+
+  /* ================ DASHBOARD ================ */
+  #dashboard {
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+  #dashboard.visible { opacity: 1; }
+
+  /* CREAM TOP BAR */
+  .topbar {
+    background: var(--cream);
+    border-bottom: 1px solid var(--dark);
+    padding: 14px 32px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 24px;
+  }
+  .topbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .topbar-brand img {
+    height: 36px;
+    width: auto;
+  }
+  .topbar-brand .fallback {
+    font-family: 'Fraunces', serif;
+    color: var(--dark);
+    font-size: 16px;
+    letter-spacing: 5px;
+    font-weight: 400;
+  }
+  .topbar-divider {
+    width: 1px; height: 26px;
+    background: var(--dark);
+    opacity: 0.4;
+  }
+  .topbar-brand-sub {
+    font-size: 9px;
+    color: var(--dark);
+    text-transform: uppercase;
+    letter-spacing: 2.2px;
+    font-weight: 600;
+  }
+  .topbar-greeting {
+    justify-self: center;
+    text-align: center;
+  }
+  .topbar-greeting .gline {
+    font-family: 'Fraunces', serif;
+    color: var(--dark);
+    font-weight: 400;
+    font-size: 22px;
+    letter-spacing: -0.3px;
+    line-height: 1.1;
+  }
+  .topbar-greeting .gline em {
+    font-style: italic;
+    font-weight: 400;
+  }
+  .topbar-greeting .gdate {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-top: 4px;
+    color: var(--grey);
+  }
+  .topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    justify-self: end;
+  }
+
+  /* Founding tier badge — Reef Gold */
+  .tier-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+    padding: 7px 14px 7px 9px;
+    background: var(--dark);
+    border: 1px solid var(--dark);
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+  }
+  .tier-badge .gem {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    font-family: 'Fraunces', serif;
+  }
+  .tier-badge .pts {
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .tier-badge .sep { opacity: 0.4; margin: 0 2px; }
+
+  .topbar-user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 4px 14px 4px 4px;
+    border: 1px solid var(--dark);
+    border-radius: 999px;
+    cursor: pointer;
+    background: transparent;
+    transition: all 0.2s;
+  }
+  .topbar-user:hover { background: rgba(11,29,45,0.06); }
+  .topbar-avatar {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--dark);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 11px;
+    overflow: hidden;
+    position: relative;
+  }
+  .topbar-avatar img {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    object-fit: cover; z-index: 2;
+  }
+  .topbar-username {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--dark);
+  }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 230px 1fr;
+    min-height: calc(100vh - 65px);
+  }
+
+  /* ================ SIDEBAR ================ */
+  .sidebar {
+    background: transparent;
+    border-right: 1px solid var(--border-soft);
+    padding: 30px 14px 40px;
+    overflow-y: auto;
+  }
+  .sidebar-group { margin-bottom: 26px; }
+  .sidebar-label {
+    padding: 0 14px;
+    margin-bottom: 8px;
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+  }
+  .sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 9px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+  }
+  .sidebar-item:hover {
+    background: var(--cream-pale);
+    color: var(--dark);
+  }
+  .sidebar-item.active {
+    background: var(--dark);
+    color: #fff;
+    font-weight: 500;
+  }
+  .sidebar-icon {
+    width: 18px;
+    font-size: 14px;
+    color: var(--grey);
+    text-align: center;
+  }
+  .sidebar-item.active .sidebar-icon { color: #fff; }
+  .sidebar-item .pill {
+    margin-left: auto;
+    font-size: 9px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 10px;
+    background: var(--cream);
+    color: var(--dark);
+    letter-spacing: 0.5px;
+  }
+  .sidebar-item.active .pill {
+    background: var(--cream);
+    color: var(--dark);
+  }
+
+  /* ================ MAIN ================ */
+  .main {
+    padding: 36px 44px 80px;
+    max-width: 1200px;
+  }
+  .fade-in {
+    opacity: 0;
+    transform: translateY(12px);
+    animation: fadeIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .fade-in:nth-child(1) { animation-delay: 0.05s; }
+  .fade-in:nth-child(2) { animation-delay: 0.12s; }
+  .fade-in:nth-child(3) { animation-delay: 0.18s; }
+  .fade-in:nth-child(4) { animation-delay: 0.24s; }
+  .fade-in:nth-child(5) { animation-delay: 0.30s; }
+  .fade-in:nth-child(6) { animation-delay: 0.36s; }
+  .fade-in:nth-child(7) { animation-delay: 0.42s; }
+
+  .section { margin-bottom: 32px; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .section-eyebrow {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: 4px;
+  }
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 24px;
+    color: var(--dark-soft);
+    letter-spacing: -0.3px;
+  }
+  .section-link {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--dark);
+    cursor: pointer;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .section-link:hover { color: var(--grey); }
+
+  /* ================ SERVICE BANNER ================ */
+  .service-banner {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 20px 26px;
+    background: var(--cream-soft);
+    border: 1px solid var(--border-soft);
+    border-left: 3px solid var(--dark);
+    border-radius: var(--radius);
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .service-banner:hover {
+    border-color: var(--border);
+    box-shadow: var(--shadow);
+  }
+  .service-banner-icon {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--dark);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .service-banner-body { flex: 1; }
+  .service-banner-eyebrow {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: 3px;
+  }
+  .service-banner-title {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--dark-soft);
+    margin-bottom: 4px;
+    letter-spacing: -0.2px;
+  }
+  .service-banner-meta {
+    font-size: 11px;
+    color: var(--grey);
+  }
+  .service-banner-meta .sep { margin: 0 8px; color: var(--border); }
+  .service-banner-action {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--dark);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .service-banner-action:hover { color: var(--gold); }
+
+  /* ================ RESIDENCE ================ */
+  .residence {
+    display: grid;
+    grid-template-columns: 1.05fr 1.1fr;
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .residence-image {
+    min-height: 320px;
+    background-color: #1A3548;
+    background-image:
+      linear-gradient(120deg, rgba(11,29,45,0.45) 0%, rgba(11,29,45,0.05) 60%),
+      radial-gradient(ellipse at 30% 70%, rgba(138,115,77,0.30) 0%, transparent 50%),
+      linear-gradient(180deg, #2F6B7E 0%, #1A4358 45%, #0B1D2D 100%);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+  .residence-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 75% 35%, rgba(255,240,220,0.18) 0%, transparent 35%);
+  }
+  .residence-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(11,29,45,0.55) 100%);
+  }
+  .residence-image-tag {
+    position: absolute;
+    bottom: 22px;
+    left: 24px;
+    z-index: 2;
+    color: #fff;
+  }
+  .residence-image-tag .e {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2.5px;
+    color: var(--cream);
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+  .residence-image-tag .l {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: -0.2px;
+  }
+  .residence-body {
+    padding: 30px 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .residence-eyebrow {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--grey);
+    margin-bottom: 10px;
+  }
+  .residence-name {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--dark-soft);
+    letter-spacing: -0.5px;
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  .residence-name em {
+    font-style: italic;
+    font-weight: 400;
+  }
+  .residence-addr {
+    font-size: 13px;
+    color: var(--grey);
+    margin-bottom: 22px;
+  }
+  .residence-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+    padding: 18px 0;
+    border-top: 1px solid var(--border-soft);
+    border-bottom: 1px solid var(--border-soft);
+    margin-bottom: 20px;
+  }
+  .residence-stat .l {
+    font-size: 9px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .residence-stat .v {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--dark-soft);
+    letter-spacing: -0.2px;
+  }
+  .residence-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--grey);
+  }
+  .residence-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .residence-meta-row .v {
+    color: var(--dark-soft);
+    font-weight: 500;
+  }
+
+  /* ================ CHARGES ================ */
+  .charges {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+  .charges-summary {
+    background: var(--dark);
+    color: #fff;
+    padding: 28px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 220px;
+  }
+  .charges-eyebrow {
+    font-size: 9px;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    color: var(--cream);
+    font-weight: 500;
+    margin-bottom: 16px;
+    opacity: 0.9;
+  }
+  .charges-total-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    letter-spacing: 1.8px;
+    margin-bottom: 8px;
+  }
+  .charges-total {
+    font-family: 'Fraunces', serif;
+    font-size: 42px;
+    font-weight: 300;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: -1.5px;
+    margin-bottom: 8px;
+  }
+  .charges-total .ccy {
+    font-size: 16px;
+    color: var(--cream);
+    margin-right: 6px;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+  .charges-due {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 14px;
+  }
+  .charges-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px;
+    background: rgba(242,235,224,0.10);
+    border: 1px solid rgba(242,235,224,0.25);
+    border-radius: 999px;
+    font-size: 10px;
+    color: var(--cream);
+    font-weight: 500;
+    align-self: flex-start;
+    text-transform: uppercase;
+    letter-spacing: 1.3px;
+  }
+  .charges-status .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--cream);
+  }
+  .charges-detail {
+    padding: 28px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .charges-property {
+    font-size: 10px;
+    color: var(--grey);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    margin-bottom: 4px;
+  }
+  .charges-name {
+    font-family: 'Fraunces', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: var(--dark-soft);
+    margin-bottom: 18px;
+  }
+  .charges-breakdown {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 22px;
+  }
+  .charges-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 5px 0;
+    font-size: 12px;
+    border-bottom: 1px dashed var(--border-soft);
+  }
+  .charges-row .l { color: var(--grey); }
+  .charges-row .v { color: var(--dark-soft); font-weight: 500; }
+  .charges-row.total {
+    border-bottom: none;
+    border-top: 1px solid var(--border);
+    padding-top: 10px;
+    margin-top: 4px;
+  }
+  .charges-row.total .l { color: var(--dark); font-weight: 600; }
+  .charges-row.total .v {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    color: var(--dark-soft);
+  }
+  .charges-pay {
+    display: block;
+    text-align: center;
+    background: var(--dark);
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: background 0.2s;
+  }
+  .charges-pay:hover { background: var(--dark-soft); }
+
+  /* ================ PRIVILEGES ================ */
+  .privileges {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .privilege {
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    padding: 22px 20px;
+    transition: all 0.2s;
+  }
+  .privilege:hover {
+    border-color: var(--border);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .privilege-icon {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--cream);
+    color: var(--dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    margin-bottom: 14px;
+  }
+  .privilege-name {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--dark-soft);
+    margin-bottom: 4px;
+    line-height: 1.25;
+  }
+  .privilege-meta {
+    font-size: 11px;
+    color: var(--grey);
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .privilege-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 9px;
+    color: var(--success);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+  }
+  .privilege-status .dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--success);
+  }
+
+  /* ================ EXPERIENCES (booking) ================ */
+  .experiences {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .experience {
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: all 0.2s;
+  }
+  .experience:hover {
+    border-color: var(--border);
+    box-shadow: var(--shadow);
+  }
+  .experience-img {
+    width: 70px; height: 70px;
+    border-radius: var(--radius);
+    flex-shrink: 0;
+    background-color: var(--cream);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .experience-img--marine {
+    background-image: linear-gradient(135deg, #2F6B7E 0%, #0B1D2D 100%);
+  }
+  .experience-img--spa {
+    background-image: linear-gradient(135deg, #8A734D 0%, #5C4F36 100%);
+  }
+  .experience-img--desert {
+    background-image: linear-gradient(135deg, #C8A877 0%, #6B5A3D 100%);
+  }
+  .experience-img--water {
+    background-image: linear-gradient(135deg, #5C9DAF 0%, #2F6B7E 100%);
+  }
+  .experience-img::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(ellipse at 30% 30%, rgba(255,255,255,0.15) 0%, transparent 60%);
+  }
+  .experience-body { flex: 1; }
+  .experience-eyebrow {
+    font-size: 9px;
+    color: var(--gold);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.6px;
+    margin-bottom: 4px;
+  }
+  .experience-name {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--dark-soft);
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  .experience-meta {
+    font-size: 11px;
+    color: var(--grey);
+    margin-bottom: 10px;
+    line-height: 1.4;
+  }
+  .experience-book {
+    background: transparent;
+    border: 1px solid var(--dark);
+    color: var(--dark);
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .experience-book:hover { background: var(--dark); color: #fff; }
+  .experience-book.confirmed {
+    background: var(--success);
+    border-color: var(--success);
+    color: #fff;
+    pointer-events: none;
+  }
+
+  /* ================ HERITAGE / INVITATION ================ */
+  .heritage {
+    display: grid;
+    grid-template-columns: 1fr 1.4fr;
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: all 0.3s;
+  }
+  .heritage-image {
+    min-height: 240px;
+    background-color: #0B1D2D;
+    background-image:
+      radial-gradient(ellipse at 30% 60%, rgba(138,115,77,0.40) 0%, transparent 60%),
+      linear-gradient(160deg, #C8A877 0%, #8A734D 30%, #1A3548 75%, #0B1D2D 100%);
+    background-size: cover;
+    background-position: center;
+    position: relative;
+  }
+  .heritage-image::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(11,29,45,0.55) 100%);
+  }
+  .heritage-flag {
+    position: absolute;
+    top: 22px; left: 22px;
+    z-index: 2;
+    background: rgba(255,255,255,0.92);
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--dark);
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+  }
+  .heritage-body {
+    padding: 28px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .heritage-eyebrow {
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 2.2px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .heritage-title {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    font-weight: 400;
+    color: var(--dark-soft);
+    letter-spacing: -0.3px;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .heritage-title em { font-style: italic; }
+  .heritage-reason {
+    font-size: 13px;
+    color: var(--grey);
+    line-height: 1.6;
+    margin-bottom: 16px;
+  }
+  .heritage-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-top: 1px solid var(--border-soft);
+    margin-bottom: 18px;
+    font-size: 12px;
+    color: var(--grey);
+  }
+  .heritage-meta .icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--cream);
+    color: var(--dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
+  .heritage-actions { display: flex; gap: 10px; }
+  .heritage-accept,
+  .heritage-decline {
+    flex: 1;
+    padding: 12px 16px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .heritage-accept {
+    background: var(--dark);
+    color: #fff;
+    border: 1px solid var(--dark);
+  }
+  .heritage-accept:hover { background: var(--dark-soft); }
+  .heritage-decline {
+    background: transparent;
+    color: var(--dark);
+    border: 1px solid var(--dark);
+  }
+  .heritage-decline:hover { background: var(--cream-pale); }
+  .heritage-confirmed {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    margin-top: 8px;
+    padding: 10px 14px;
+    background: rgba(74,103,65,0.08);
+    border-left: 3px solid var(--success);
+    border-radius: 0 4px 4px 0;
+    font-size: 11px;
+    color: var(--success);
+    font-weight: 500;
+  }
+  .heritage-confirmed .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--success);
+  }
+  .heritage.accepted .heritage-actions { display: none; }
+  .heritage.accepted .heritage-confirmed { display: flex; }
+
+  /* ================ QUICK ACTIONS ================ */
+  .quick-actions {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .qa {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: var(--radius);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+  }
+  .qa:hover {
+    border-color: var(--border);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow);
+  }
+  .qa-icon {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--cream);
+    color: var(--dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .qa-body { flex: 1; }
+  .qa-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark-soft);
+    margin-bottom: 2px;
+  }
+  .qa-meta {
+    font-size: 11px;
+    color: var(--grey);
+  }
+  .qa-arrow {
+    color: var(--grey);
+    font-size: 16px;
+    transition: transform 0.2s;
+  }
+  .qa:hover .qa-arrow { transform: translateX(3px); color: var(--dark); }
+
+  /* ================ MODAL ================ */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(11,29,45,0.45);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 900;
+    padding: 20px;
+  }
+  .modal-overlay.show { display: flex; animation: overlayFade 0.2s ease; }
+  @keyframes overlayFade { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    background: var(--card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 480px;
+    padding: 30px 32px;
+    animation: modalRise 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes modalRise {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .modal-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--dark-soft);
+    letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+  .modal-sub {
+    font-size: 12px;
+    color: var(--grey);
+    margin-bottom: 22px;
+  }
+  .modal-case-detail {
+    background: var(--cream-soft);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 18px;
+  }
+  .modal-case-detail .row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 12px;
+    border-bottom: 1px dashed var(--border-soft);
+  }
+  .modal-case-detail .row:last-child { border-bottom: none; }
+  .modal-case-detail .row .v { color: var(--dark-soft); font-weight: 500; }
+  .modal label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    color: var(--grey);
+    margin: 12px 0 6px;
+  }
+  .modal select,
+  .modal textarea,
+  .modal input[type="date"],
+  .modal input[type="number"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--ink);
+  }
+  .modal textarea { min-height: 80px; resize: vertical; }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .btn-primary, .btn-ghost {
+    flex: 1;
+    padding: 11px 16px;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-primary {
+    background: var(--dark);
+    color: #fff;
+    border: 1px solid var(--dark);
+  }
+  .btn-primary:hover { background: var(--dark-soft); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--dark);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover { background: var(--cream-pale); }
+
+  /* ================ TOAST ================ */
+  .toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--dark);
+    color: #fff;
+    padding: 14px 22px;
+    border-radius: 999px;
+    font-size: 13px;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    z-index: 1100;
+    pointer-events: none;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--gold);
+    color: var(--dark);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  /* ================ AGENT LABEL ================ */
+  .agent-label {
+    position: fixed;
+    bottom: 110px;
+    right: 30px;
+    background: var(--dark);
+    color: var(--cream);
+    padding: 9px 16px 9px 14px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.4s ease;
+    pointer-events: none;
+    z-index: 50;
+  }
+  .agent-label.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .agent-label .accent { color: var(--gold); font-size: 10px; }
+
+  /* ================ RESPONSIVE ================ */
+  @media (max-width: 1024px) {
+    .residence, .charges, .heritage { grid-template-columns: 1fr; }
+    .privileges { grid-template-columns: repeat(2, 1fr); }
+    .quick-actions { grid-template-columns: 1fr; }
+    .experiences { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 720px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .main { padding: 24px 20px 60px; }
+    .topbar { padding: 14px 16px; gap: 12px; grid-template-columns: auto 1fr; }
+    .topbar-greeting { display: none; }
+    .topbar-username { display: none; }
+    .privileges { grid-template-columns: 1fr; }
+    #loginScreen { grid-template-columns: 1fr; }
+    .login-hero { padding: 32px; min-height: 280px; }
+    .login-hero-copy h2 { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================ LOGIN ================ -->
+<div id="loginScreen">
+  <div class="login-hero">
+    <div class="login-hero-logo">
+      <img src="assets/logo.svg" alt="Red Sea Global"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='inline';" />
+      <span class="fallback" style="display:none;">RED SEA GLOBAL</span>
+    </div>
+    <div class="login-hero-copy">
+      <div class="login-hero-eyebrow">RESERVE LIVING · CUSTOMER PORTAL</div>
+      <h2>Regenerative luxury. <em>Living with the sea.</em></h2>
+      <p>Your residence at Nujuma Reserve, attended to with the discipline of the world's leading regenerative tourism destination.</p>
+    </div>
+    <div class="login-hero-foot">Secure Portal · Red Sea · Kingdom of Saudi Arabia</div>
+  </div>
+
+  <div class="login-form-wrap">
+    <div class="login-card">
+      <h1>Welcome back, <em>Andy</em></h1>
+      <p class="login-sub">Sign in to your Reserve Living account.</p>
+
+      <div class="login-field">
+        <label for="email">Email</label>
+        <input id="email" type="email" value="andy.thomas@gmail.com" />
+      </div>
+      <div class="login-field">
+        <label for="pw">Password</label>
+        <input id="pw" type="password" value="••••••••••" />
+      </div>
+      <button class="login-btn" onclick="doLogin()">Sign in</button>
+
+      <div class="login-divider">or</div>
+
+      <button class="login-btn-alt" onclick="doLogin()">
+        <span class="ksa-flag"></span>
+        Continue with Nafath
+      </button>
+
+      <div class="login-foot">
+        Trouble signing in? <a href="#">Contact Najm &amp; Najma</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================ DASHBOARD ================ -->
+<div id="dashboard">
+
+  <header class="topbar">
+    <div class="topbar-brand">
+      <img src="assets/logo.svg" alt="Red Sea Global"
+           onerror="this.style.display='none';this.nextElementSibling.style.display='inline';" />
+      <span class="fallback" style="display:none;">RSG</span>
+      <div class="topbar-divider"></div>
+      <div class="topbar-brand-sub">Reserve Living</div>
+    </div>
+
+    <div class="topbar-greeting">
+      <div class="gline"><span id="greeting">Good evening</span>, <em>Andy</em></div>
+      <div class="gdate" id="todayDate">—</div>
+    </div>
+
+    <div class="topbar-right">
+      <div class="tier-badge">
+        <span class="gem">◆</span>
+        <span>Founding</span>
+        <span class="sep">·</span>
+        <span class="pts">12,400</span>
+        <span>pts</span>
+      </div>
+      <div class="topbar-user">
+        <div class="topbar-avatar">
+          <img src="assets/andy.jpg" alt="Andy"
+               onload="this.nextElementSibling.style.display='none'"
+               onerror="this.style.display='none'" />
+          <span>AT</span>
+        </div>
+        <span class="topbar-username">Andy Thomas</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="layout">
+
+    <!-- ================ SIDEBAR ================ -->
+    <aside class="sidebar">
+      <div class="sidebar-group">
+        <div class="sidebar-label">My Account</div>
+        <div class="sidebar-item active"><span class="sidebar-icon">⊞</span> Overview</div>
+        <div class="sidebar-item"><span class="sidebar-icon">🏠</span> My Residence</div>
+        <div class="sidebar-item"><span class="sidebar-icon">📄</span> Documents</div>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-label">Service</div>
+        <div class="sidebar-item" onclick="openModal('case')">
+          <span class="sidebar-icon">🔧</span> Service Requests
+          <span class="pill">1</span>
+        </div>
+        <div class="sidebar-item" onclick="openModal('concierge')"><span class="sidebar-icon">🛎</span> Concierge</div>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-label">Reserve</div>
+        <div class="sidebar-item"><span class="sidebar-icon">◆</span> Reserve Privileges</div>
+        <div class="sidebar-item"><span class="sidebar-icon">🐚</span> Experiences</div>
+        <div class="sidebar-item"><span class="sidebar-icon">🌱</span> Regeneration</div>
+      </div>
+      <div class="sidebar-group">
+        <div class="sidebar-label">Account</div>
+        <div class="sidebar-item"><span class="sidebar-icon">💳</span> Billing</div>
+        <div class="sidebar-item"><span class="sidebar-icon">⚙</span> Settings</div>
+      </div>
+    </aside>
+
+    <!-- ================ MAIN ================ -->
+    <main class="main">
+
+      <!-- 1. Active Service Request -->
+      <div class="section fade-in" style="margin-bottom: 26px;">
+        <div class="service-banner" onclick="openModal('case')">
+          <div class="service-banner-icon">♨</div>
+          <div class="service-banner-body">
+            <div class="service-banner-eyebrow">Active service request</div>
+            <div class="service-banner-title">Pool heater calibration · Master Suite</div>
+            <div class="service-banner-meta">
+              <span>Working</span>
+              <span class="sep">·</span>
+              <span>Najma coordinating</span>
+              <span class="sep">·</span>
+              <span>Technician ETA Wednesday</span>
+            </div>
+          </div>
+          <a class="service-banner-action" onclick="event.stopPropagation();openModal('case')">View case</a>
+        </div>
+      </div>
+
+      <!-- 2. My Residence -->
+      <div class="section fade-in">
+        <div class="section-header">
+          <div>
+            <div class="section-eyebrow">My Residence</div>
+            <div class="section-title">Your Nujuma Reserve villa</div>
+          </div>
+          <span class="section-link">Residence details →</span>
+        </div>
+
+        <div class="residence">
+          <div class="residence-image">
+            <div class="residence-image-tag">
+              <div class="e">Ummahat Island</div>
+              <div class="l">Nujuma Reserve · Six Senses</div>
+            </div>
+          </div>
+          <div class="residence-body">
+            <div>
+              <div class="residence-eyebrow">Reserve Villa · 24-month lease</div>
+              <div class="residence-name">Villa <em>No. 14</em></div>
+              <div class="residence-addr">Nujuma Reserve · Ummahat Island · The Red Sea</div>
+
+              <div class="residence-stats">
+                <div class="residence-stat">
+                  <div class="l">Residence Type</div>
+                  <div class="v">Reserve Villa · 4BR</div>
+                </div>
+                <div class="residence-stat">
+                  <div class="l">Annual Lease</div>
+                  <div class="v">SAR 3.84M</div>
+                </div>
+                <div class="residence-stat">
+                  <div class="l">Loyalty Tier</div>
+                  <div class="v">Founding</div>
+                </div>
+                <div class="residence-stat">
+                  <div class="l">Months Remaining</div>
+                  <div class="v">21 of 24</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="residence-meta">
+              <div class="residence-meta-row">
+                <span>Handover</span>
+                <span class="v">15 Jan 2026</span>
+              </div>
+              <div class="residence-meta-row">
+                <span>Lease status</span>
+                <span class="v">Active · Reserve Founders rate locked</span>
+              </div>
+              <div class="residence-meta-row">
+                <span>Personal hosts</span>
+                <span class="v">Najm &amp; Najma · 24/7</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 3. Lease & Community Fees -->
+      <div class="section fade-in">
+        <div class="section-header">
+          <div>
+            <div class="section-eyebrow">Payments</div>
+            <div class="section-title">Lease &amp; community fees</div>
+          </div>
+          <span class="section-link">Payment history →</span>
+        </div>
+
+        <div class="charges">
+          <div class="charges-summary">
+            <div>
+              <div class="charges-eyebrow">May 2026 + Q2 · Action required</div>
+              <div class="charges-total-label">Amount due</div>
+              <div class="charges-total"><span class="ccy">SAR</span>415,000</div>
+              <div class="charges-due">May lease due 15 May · Q2 community fee due 30 Jun</div>
+              <div class="charges-status"><span class="dot"></span>On schedule</div>
+            </div>
+          </div>
+
+          <div class="charges-detail">
+            <div>
+              <div class="charges-property">Nujuma Reserve Villa No. 14</div>
+              <div class="charges-name">May 2026 lease + Q2 community fee</div>
+
+              <div class="charges-breakdown">
+                <div class="charges-row">
+                  <span class="l">May 2026 monthly lease</span>
+                  <span class="v">SAR 320,000</span>
+                </div>
+                <div class="charges-row">
+                  <span class="l">Q2 2026 community fee</span>
+                  <span class="v">SAR 95,000</span>
+                </div>
+                <div class="charges-row total">
+                  <span class="l">Total due</span>
+                  <span class="v">SAR 415,000</span>
+                </div>
+              </div>
+            </div>
+
+            <a class="charges-pay" href="payment.html?ref=RSG-2026-MAY-Q2&amount=415000&label=May+2026+Lease+%2B+Q2+Community+Fee+%C2%B7+Nujuma+Reserve+Villa+%2314">
+              Pay SAR 415,000
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Reserve Privileges -->
+      <div class="section fade-in">
+        <div class="section-header">
+          <div>
+            <div class="section-eyebrow">Reserve Privileges</div>
+            <div class="section-title">Included with your residence</div>
+          </div>
+          <span class="section-link">All privileges →</span>
+        </div>
+
+        <div class="privileges">
+          <div class="privilege">
+            <div class="privilege-icon">🛎</div>
+            <div class="privilege-name">Najm &amp; Najma</div>
+            <div class="privilege-meta">24/7 personal hosts · last contact 3 days ago</div>
+            <div class="privilege-status"><span class="dot"></span>Active</div>
+          </div>
+          <div class="privilege">
+            <div class="privilege-icon">✿</div>
+            <div class="privilege-name">Neyrah Spa Wellness</div>
+            <div class="privilege-meta">8 treatments/year · 5 remaining this period</div>
+            <div class="privilege-status"><span class="dot"></span>Available</div>
+          </div>
+          <div class="privilege">
+            <div class="privilege-icon">🐚</div>
+            <div class="privilege-name">Galaxea Marine Society</div>
+            <div class="privilege-meta">Unlimited dives · Reef Site #214 patron</div>
+            <div class="privilege-status"><span class="dot"></span>Active</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 5. Reserve Experiences (BOOKABLE) -->
+      <div class="section fade-in">
+        <div class="section-header">
+          <div>
+            <div class="section-eyebrow">Reserve Experiences</div>
+            <div class="section-title">Book with Najma</div>
+          </div>
+          <span class="section-link">Full calendar →</span>
+        </div>
+
+        <div class="experiences">
+          <div class="experience">
+            <div class="experience-img experience-img--marine"></div>
+            <div class="experience-body">
+              <div class="experience-eyebrow">Galaxea · Marine</div>
+              <div class="experience-name">Night Dive · Reef Site #214</div>
+              <div class="experience-meta">Bioluminescent reef · 90 min · 1-2 guests</div>
+              <button class="experience-book" onclick="openBooking('Galaxea Night Dive · Reef Site #214')">Book Experience</button>
+            </div>
+          </div>
+          <div class="experience">
+            <div class="experience-img experience-img--spa"></div>
+            <div class="experience-body">
+              <div class="experience-eyebrow">Neyrah Spa · Wellness</div>
+              <div class="experience-name">Lunar Recovery Ritual</div>
+              <div class="experience-meta">120 min · marine clay + Six Senses oils</div>
+              <button class="experience-book" onclick="openBooking('Lunar Recovery Ritual · Neyrah Spa')">Book Experience</button>
+            </div>
+          </div>
+          <div class="experience">
+            <div class="experience-img experience-img--desert"></div>
+            <div class="experience-body">
+              <div class="experience-eyebrow">Akun · Land</div>
+              <div class="experience-name">Desert Stargazing &amp; Dunes</div>
+              <div class="experience-meta">Sunset to nightfall · family of 4 · curated</div>
+              <button class="experience-book" onclick="openBooking('Desert Stargazing &amp; Dunes · Akun')">Book Experience</button>
+            </div>
+          </div>
+          <div class="experience">
+            <div class="experience-img experience-img--water"></div>
+            <div class="experience-body">
+              <div class="experience-eyebrow">WAMA · Water</div>
+              <div class="experience-name">Sunrise Paddleboard</div>
+              <div class="experience-meta">60 min · 1 guest · all levels</div>
+              <button class="experience-book" onclick="openBooking('Sunrise Paddleboard · WAMA')">Book Experience</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 6. Reserve Invitation -->
+      <div class="section fade-in">
+        <div class="section-header">
+          <div>
+            <div class="section-eyebrow">Personalised for you</div>
+            <div class="section-title">An invitation from Reserve Founders</div>
+          </div>
+          <span class="section-link">Other experiences →</span>
+        </div>
+
+        <div class="heritage" id="inviteCard">
+          <div class="heritage-image">
+            <span class="heritage-flag">By invitation</span>
+          </div>
+          <div class="heritage-body">
+            <div class="heritage-eyebrow">Founding tier · Sheybarah Island</div>
+            <div class="heritage-title">Sheybarah Preview <em>Weekend</em></div>
+            <p class="heritage-reason">
+              In recognition of your engagement with Reserve experiences and strong portal activity, RSG invites you to two complimentary nights at Sheybarah — our newly opened stainless-steel overwater villas. Phase 2 launch weekend, 22–23 May.
+            </p>
+            <div class="heritage-meta">
+              <div class="icon">🗓</div>
+              <div>22–23 May 2026 · Two guests · Limited availability</div>
+            </div>
+            <div class="heritage-actions">
+              <button class="heritage-accept" id="inviteAcceptBtn" onclick="acceptInvitation()">Accept invitation</button>
+              <button class="heritage-decline" onclick="openModal('inviteDetails')">View details</button>
+            </div>
+            <div class="heritage-confirmed">
+              <span class="dot"></span>Invitation accepted — Najma will be in touch to confirm seaplane transfers
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 7. Quick Actions -->
+      <div class="section fade-in" style="margin-bottom: 0;">
+        <div class="section-header">
+          <div>
+            <div class="section-eyebrow">Quick Actions</div>
+            <div class="section-title">What can we do for you?</div>
+          </div>
+        </div>
+
+        <div class="quick-actions">
+          <a class="qa" onclick="openModal('concierge')">
+            <div class="qa-icon">🛎</div>
+            <div class="qa-body">
+              <div class="qa-title">Contact Najm &amp; Najma</div>
+              <div class="qa-meta">24/7 · Reserve Concierge</div>
+            </div>
+            <div class="qa-arrow">→</div>
+          </a>
+          <a class="qa" onclick="openModal('newRequest')">
+            <div class="qa-icon">🔧</div>
+            <div class="qa-body">
+              <div class="qa-title">Submit Service Request</div>
+              <div class="qa-meta">Maintenance · Housekeeping · Other</div>
+            </div>
+            <div class="qa-arrow">→</div>
+          </a>
+          <a class="qa" onclick="openModal('docs')">
+            <div class="qa-icon">📄</div>
+            <div class="qa-body">
+              <div class="qa-title">View Documents</div>
+              <div class="qa-meta">Lease · Handover · Conservation pledge</div>
+            </div>
+            <div class="qa-arrow">→</div>
+          </a>
+        </div>
+      </div>
+
+    </main>
+  </div>
+</div>
+
+<!-- ================ MODAL: Case ================ -->
+<div class="modal-overlay" id="modal-case" onclick="if(event.target===this)closeModal('case')">
+  <div class="modal">
+    <div class="modal-title">Pool heater calibration · Master Suite</div>
+    <div class="modal-sub">Reference RSG-MR-2026-00118 · Opened 6 days ago</div>
+
+    <div class="modal-case-detail">
+      <div class="row"><span>Status</span><span class="v">Working · technician scheduled</span></div>
+      <div class="row"><span>Assigned to</span><span class="v">Estate Facilities · Nujuma Reserve</span></div>
+      <div class="row"><span>ETA</span><span class="v">Wednesday morning, attendance confirmed</span></div>
+      <div class="row"><span>Coordinator</span><span class="v">Najma · Residence Concierge</span></div>
+    </div>
+
+    <p style="font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:18px;">
+      The pool surface is running 2°C below setpoint. Diagnostics complete; calibration parts arrive Tuesday.
+      Najma will be on site Wednesday morning to confirm restoration before your guests arrive Saturday.
+    </p>
+
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('case')">Close</button>
+      <button class="btn-primary" onclick="closeModal('case');showToast('Najma notified — she will call you shortly')">Contact Najma</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================ MODAL: New service request ================ -->
+<div class="modal-overlay" id="modal-newRequest" onclick="if(event.target===this)closeModal('newRequest')">
+  <div class="modal">
+    <div class="modal-title">New service request</div>
+    <div class="modal-sub">We'll route this to your residence team at Nujuma Reserve.</div>
+
+    <label>Residence</label>
+    <select>
+      <option>Nujuma Reserve Villa No. 14 · Ummahat Island</option>
+    </select>
+
+    <label>Category</label>
+    <select>
+      <option>HVAC / Climate Control</option>
+      <option>Plumbing</option>
+      <option>Electrical</option>
+      <option>Pool &amp; Spa</option>
+      <option>Housekeeping</option>
+      <option>Smart-home / Technology</option>
+      <option>Outdoor &amp; Garden</option>
+      <option>General maintenance</option>
+    </select>
+
+    <label>Describe the issue</label>
+    <textarea placeholder="A short description helps us route to the right specialist…"></textarea>
+
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('newRequest')">Cancel</button>
+      <button class="btn-primary" onclick="closeModal('newRequest');showToast('Request logged — Ref RSG-MR-2026-00119')">Submit request</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================ MODAL: Concierge ================ -->
+<div class="modal-overlay" id="modal-concierge" onclick="if(event.target===this)closeModal('concierge')">
+  <div class="modal">
+    <div class="modal-title">Contact Najm &amp; Najma</div>
+    <div class="modal-sub">Reserve Concierge · 24/7</div>
+
+    <div class="modal-case-detail">
+      <div class="row"><span>Najm · Sales</span><span class="v">+966 12 350 0118</span></div>
+      <div class="row"><span>Najma · Residence</span><span class="v">+966 12 350 0119</span></div>
+      <div class="row"><span>Email</span><span class="v">hosts@reserve.redseaglobal.com</span></div>
+      <div class="row"><span>WhatsApp</span><span class="v">+966 50 555 0118</span></div>
+      <div class="row"><span>Reserve desk</span><span class="v">Nujuma Lobby · staffed 24/7</span></div>
+    </div>
+
+    <label>Message your concierge</label>
+    <textarea placeholder="Reservations, transport, special requests…"></textarea>
+
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('concierge')">Close</button>
+      <button class="btn-primary" onclick="closeModal('concierge');showToast('Message sent to Najm &amp; Najma')">Send message</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================ MODAL: Documents ================ -->
+<div class="modal-overlay" id="modal-docs" onclick="if(event.target===this)closeModal('docs')">
+  <div class="modal">
+    <div class="modal-title">Your documents</div>
+    <div class="modal-sub">Securely held by Reserve Living. Tap to download.</div>
+
+    <div class="modal-case-detail">
+      <div class="row"><span>Lease agreement · Villa No. 14</span><span class="v">Signed · PDF</span></div>
+      <div class="row"><span>Handover pack</span><span class="v">14 documents</span></div>
+      <div class="row"><span>Conservation pledge</span><span class="v">Signed · 15 Jan 2026</span></div>
+      <div class="row"><span>Residence manuals</span><span class="v">Smart home · Climate · Pool</span></div>
+      <div class="row"><span>Q1 regeneration report</span><span class="v">PDF · 47 mangroves planted</span></div>
+      <div class="row"><span>Warranty &amp; snagging</span><span class="v">24 months · Active</span></div>
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('docs')">Close</button>
+      <button class="btn-primary" onclick="closeModal('docs');showToast('Documents emailed to andy.thomas@gmail.com')">Email all to me</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================ MODAL: Invitation details ================ -->
+<div class="modal-overlay" id="modal-inviteDetails" onclick="if(event.target===this)closeModal('inviteDetails')">
+  <div class="modal">
+    <div class="modal-title">Sheybarah Preview Weekend</div>
+    <div class="modal-sub">An invitation extended to Founding-tier residents.</div>
+
+    <div class="modal-case-detail">
+      <div class="row"><span>Venue</span><span class="v">Sheybarah Island · overwater villas</span></div>
+      <div class="row"><span>Period</span><span class="v">22–23 May 2026</span></div>
+      <div class="row"><span>Format</span><span class="v">2 nights · curated dining · Phase 2 preview</span></div>
+      <div class="row"><span>Guests</span><span class="v">Two</span></div>
+      <div class="row"><span>Transfer</span><span class="v">Seaplane from Nujuma included</span></div>
+      <div class="row"><span>Availability</span><span class="v">Limited · by invitation only</span></div>
+    </div>
+
+    <p style="font-size:12px;color:var(--grey);line-height:1.6;margin-bottom:18px;">
+      Accept to confirm interest. Najma will be in touch within 24 hours to coordinate seaplane departure times,
+      dietary preferences, and any spa or excursion arrangements ahead of arrival.
+    </p>
+
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('inviteDetails')">Close</button>
+      <button class="btn-primary" onclick="closeModal('inviteDetails');acceptInvitation()">Accept invitation</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================ MODAL: Experience booking ================ -->
+<div class="modal-overlay" id="modal-booking" onclick="if(event.target===this)closeModal('booking')">
+  <div class="modal">
+    <div class="modal-title" id="bookingTitle">Book Experience</div>
+    <div class="modal-sub">Najma will confirm availability and coordinate transfers if needed.</div>
+
+    <label>Preferred date</label>
+    <input type="date" id="bookingDate" />
+
+    <label>Time</label>
+    <select id="bookingTime">
+      <option>Morning · 06:00–10:00</option>
+      <option>Midday · 11:00–14:00</option>
+      <option>Afternoon · 14:00–17:00</option>
+      <option>Evening · 17:30–20:00</option>
+      <option>Night · 20:00 onward</option>
+    </select>
+
+    <label>Number of guests</label>
+    <input type="number" id="bookingGuests" value="2" min="1" max="6" />
+
+    <label>Notes for Najma <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--muted);">(optional)</span></label>
+    <textarea id="bookingNotes" placeholder="Dietary requirements, transport preferences, special occasion…"></textarea>
+
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal('booking')">Cancel</button>
+      <button class="btn-primary" onclick="confirmBooking()">Confirm Booking</button>
+    </div>
+  </div>
+</div>
+
+<!-- ================ TOAST ================ -->
+<div class="toast" id="toast">
+  <div class="toast-icon">✓</div>
+  <div id="toastMsg">Action completed</div>
+</div>
+
+<!-- ================ AGENTFORCE ================ -->
+<script type='text/javascript'>
+  function initEmbeddedMessaging() {
+    try {
+      embeddedservice_bootstrap.settings.language = 'en_US';
+      embeddedservice_bootstrap.init(
+        '00DJ9000002Fyo9',
+        'Sobha_Profile',
+        'https://trailsignup-4b004e83e42b95.my.site.com/ESWSobhaProfile1776281634999',
+        { scrt2URL: 'https://trailsignup-4b004e83e42b95.my.salesforce-scrt.com' }
+      );
+    } catch (err) {
+      console.error('Embedded Messaging error:', err);
+    }
+  }
+</script>
+<script type='text/javascript'
+  src='https://trailsignup-4b004e83e42b95.my.site.com/ESWSobhaProfile1776281634999/assets/js/bootstrap.min.js'
+  onload='initEmbeddedMessaging()'>
+</script>
+
+<script>
+  // Greeting + date
+  (function() {
+    var now = new Date();
+    var months = ['January','February','March','April','May','June',
+                  'July','August','September','October','November','December'];
+    var dateStr = now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear();
+    var dateEl = document.getElementById('todayDate');
+    if (dateEl) dateEl.textContent = dateStr;
+
+    var hour = now.getHours();
+    var greeting = 'Good evening';
+    if (hour < 12) greeting = 'Good morning';
+    else if (hour < 17) greeting = 'Good afternoon';
+    var greetEl = document.getElementById('greeting');
+    if (greetEl) greetEl.textContent = greeting;
+
+    // Default booking date — tomorrow
+    var d = new Date();
+    d.setDate(d.getDate() + 1);
+    var iso = d.toISOString().split('T')[0];
+    var bdEl = document.getElementById('bookingDate');
+    if (bdEl) bdEl.value = iso;
+  })();
+
+  function doLogin() {
+    document.getElementById('loginScreen').classList.add('hidden');
+    setTimeout(function() {
+      document.getElementById('dashboard').classList.add('visible');
+      setTimeout(function() {
+        var lbl = document.getElementById('agentLabel');
+        if (lbl) {
+          lbl.classList.add('show');
+          setTimeout(function() { lbl.classList.remove('show'); }, 4500);
+        }
+      }, 1800);
+    }, 500);
+  }
+
+  function openModal(id) {
+    document.getElementById('modal-' + id).classList.add('show');
+  }
+  function closeModal(id) {
+    document.getElementById('modal-' + id).classList.remove('show');
+  }
+
+  // Experience booking flow
+  var currentBookingExperience = null;
+  var currentBookingButton = null;
+  function openBooking(experienceName) {
+    currentBookingExperience = experienceName;
+    currentBookingButton = event && event.target ? event.target : null;
+    document.getElementById('bookingTitle').textContent = 'Book · ' + experienceName;
+    openModal('booking');
+  }
+  function confirmBooking() {
+    closeModal('booking');
+    if (currentBookingButton) {
+      currentBookingButton.classList.add('confirmed');
+      currentBookingButton.textContent = 'Confirmed';
+    }
+    showToast('Booking sent to Najma — confirmation within 1 hour');
+    currentBookingExperience = null;
+    currentBookingButton = null;
+  }
+
+  // Toast
+  var toastTimer;
+  function showToast(msg) {
+    clearTimeout(toastTimer);
+    document.getElementById('toastMsg').innerHTML = msg;
+    document.getElementById('toast').classList.add('show');
+    toastTimer = setTimeout(function() {
+      document.getElementById('toast').classList.remove('show');
+    }, 3200);
+  }
+
+  function acceptInvitation() {
+    document.getElementById('inviteCard').classList.add('accepted');
+    showToast('Invitation accepted — Najma will be in touch shortly');
+  }
+
+  // Sidebar active state
+  document.querySelectorAll('.sidebar-item').forEach(function(item) {
+    item.addEventListener('click', function() {
+      if (this.getAttribute('onclick')) return;
+      document.querySelectorAll('.sidebar-item').forEach(function(i) { i.classList.remove('active'); });
+      this.classList.add('active');
+    });
+  });
+</script>
+
+<div class="agent-label" id="agentLabel"><span class="accent">●</span> Your Reserve concierge is ready</div>
+
+</body>
+</html>

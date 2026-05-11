@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lease &amp; Community Fee Settlement · Red Sea Global</title>
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,300;9..144,0,400;9..144,0,500;9..144,1,300;9..144,1,400&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark:         #0B1D2D;
+    --dark-soft:    #142B3D;
+    --ink:          #1F2A36;
+    --text-mid:     #2C3A48;
+    --grey:         #4A5562;
+    --muted:        #8C95A0;
+
+    --cream:        #F2EBE0;
+    --cream-pale:   #F5EFE6;
+    --cream-soft:   #FAF7F2;
+    --card:         #FFFFFF;
+
+    --border:       #D9CDB8;
+    --border-soft:  #E8DECC;
+
+    --gold:         #8A734D;
+    --success:      #4A6741;
+    --danger:       #7A2E1F;
+
+    --shadow-md:    0 12px 32px rgba(11,29,45,0.08);
+    --shadow-lg:    0 32px 60px rgba(11,29,45,0.20);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--ink);
+    background: var(--cream-soft);
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* TOPBAR */
+  .topbar {
+    background: var(--cream);
+    border-bottom: 1px solid var(--dark);
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .topbar-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .topbar-brand img {
+    height: 36px;
+    width: auto;
+  }
+  .topbar-brand .fallback {
+    font-family: 'Fraunces', serif;
+    color: var(--dark);
+    font-size: 16px;
+    letter-spacing: 5px;
+    font-weight: 400;
+  }
+  .topbar-divider {
+    width: 1px; height: 26px;
+    background: var(--dark);
+    opacity: 0.4;
+  }
+  .topbar-brand-sub {
+    font-size: 9px;
+    color: var(--dark);
+    text-transform: uppercase;
+    letter-spacing: 2.2px;
+    font-weight: 600;
+  }
+  .secure-lbl {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 14px;
+    border: 1px solid var(--dark);
+    border-radius: 999px;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--dark);
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+  }
+  .secure-lbl .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--success);
+  }
+
+  /* MAIN */
+  main {
+    padding: 60px 24px 80px;
+    min-height: calc(100vh - 65px);
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+  .pay-wrap {
+    width: 100%;
+    max-width: 480px;
+  }
+
+  /* Payment form */
+  .pay-form {
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: 16px;
+    padding: 36px 32px 32px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.4s ease;
+  }
+  .pay-form.hide {
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+    position: absolute;
+  }
+  .pay-eyebrow {
+    font-size: 10px;
+    color: var(--grey);
+    font-weight: 600;
+    letter-spacing: 2.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .pay-title {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    font-weight: 300;
+    color: var(--dark-soft);
+    letter-spacing: -0.6px;
+    line-height: 1.15;
+    margin-bottom: 6px;
+  }
+  .pay-title em { font-style: italic; font-weight: 400; }
+  .pay-sub {
+    font-size: 13px;
+    color: var(--grey);
+    margin-bottom: 24px;
+  }
+
+  .amount-card {
+    background: var(--dark);
+    color: #fff;
+    padding: 32px 26px;
+    border-radius: 12px;
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .amount-label {
+    font-size: 10px;
+    color: var(--cream);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+    opacity: 0.9;
+  }
+  .amount-value {
+    font-family: 'Fraunces', serif;
+    font-size: 52px;
+    font-weight: 300;
+    color: #fff;
+    line-height: 1;
+    letter-spacing: -1.8px;
+    margin-bottom: 8px;
+  }
+  .amount-value .ccy {
+    font-size: 18px;
+    color: var(--cream);
+    margin-right: 8px;
+    letter-spacing: 0;
+    font-weight: 400;
+  }
+  .amount-desc {
+    font-size: 12px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .detail-card {
+    background: var(--cream-soft);
+    border: 1px solid var(--border-soft);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 20px;
+  }
+  .detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 0;
+    font-size: 12px;
+    border-bottom: 1px dashed var(--border-soft);
+  }
+  .detail-row:last-child { border-bottom: none; }
+  .detail-row .lbl { color: var(--grey); }
+  .detail-row .val { color: var(--dark-soft); font-weight: 500; text-align: right; }
+  .mono {
+    font-family: 'SF Mono', Monaco, monospace;
+    font-size: 11px;
+    letter-spacing: 0.3px;
+  }
+
+  .method-label {
+    display: block;
+    font-size: 10px;
+    font-weight: 600;
+    color: var(--grey);
+    text-transform: uppercase;
+    letter-spacing: 1.4px;
+    margin-bottom: 8px;
+  }
+  .method-select {
+    width: 100%;
+    height: 46px;
+    padding: 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: #fff;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .method-select:focus { outline: none; border-color: var(--dark); }
+
+  .pay-btn {
+    width: 100%;
+    height: 52px;
+    background: var(--dark);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: background 0.2s;
+  }
+  .pay-btn:hover { background: var(--dark-soft); }
+  .pay-btn .lock { opacity: 0.7; }
+
+  .terms {
+    margin-top: 16px;
+    font-size: 10px;
+    color: var(--muted);
+    text-align: center;
+    line-height: 1.6;
+  }
+  .terms a { color: var(--grey); text-decoration: none; }
+  .terms a:hover { text-decoration: underline; }
+
+  /* Success */
+  .success-card {
+    background: var(--card);
+    border: 1px solid var(--border-soft);
+    border-radius: 16px;
+    padding: 44px 32px 32px;
+    box-shadow: var(--shadow-md);
+    text-align: center;
+    opacity: 0;
+    transform: scale(0.95);
+    pointer-events: none;
+    position: absolute;
+    transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .success-card.show {
+    opacity: 1;
+    transform: scale(1);
+    pointer-events: auto;
+    position: static;
+  }
+  .success-icon {
+    width: 64px; height: 64px;
+    border-radius: 50%;
+    background: var(--success);
+    color: #fff;
+    font-size: 30px;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 18px;
+    animation: pop 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  @keyframes pop {
+    from { transform: scale(0); }
+    to   { transform: scale(1); }
+  }
+  .success-title {
+    font-family: 'Fraunces', serif;
+    font-size: 28px;
+    font-weight: 400;
+    color: var(--dark-soft);
+    margin-bottom: 8px;
+    letter-spacing: -0.4px;
+  }
+  .success-sub {
+    font-size: 13px;
+    color: var(--grey);
+    margin-bottom: 24px;
+  }
+  .success-amt {
+    font-family: 'Fraunces', serif;
+    font-size: 38px;
+    font-weight: 400;
+    color: var(--dark);
+    letter-spacing: -1px;
+    margin-bottom: 24px;
+  }
+  .success-amt .ccy {
+    font-size: 16px;
+    color: var(--grey);
+    margin-right: 6px;
+    font-weight: 400;
+  }
+  .success-details {
+    background: var(--cream-soft);
+    border-radius: 8px;
+    padding: 18px 20px;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+  .back-btn {
+    display: inline-block;
+    width: 100%;
+    padding: 13px 20px;
+    background: transparent;
+    color: var(--dark);
+    border: 1px solid var(--dark);
+    border-radius: 4px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.6px;
+    text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .back-btn:hover { background: var(--cream-pale); }
+
+  @media (max-width: 540px) {
+    main { padding: 30px 16px 60px; }
+    .pay-form { padding: 26px 22px; }
+    .pay-title { font-size: 26px; }
+    .amount-value { font-size: 42px; }
+    .amount-card { padding: 26px 18px; }
+    .detail-card { padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-brand">
+    <img src="assets/logo.svg" alt="Red Sea Global"
+         onerror="this.style.display='none';this.nextElementSibling.style.display='inline';" />
+    <span class="fallback" style="display:none;">RSG</span>
+    <div class="topbar-divider"></div>
+    <div class="topbar-brand-sub">Reserve Living</div>
+  </div>
+  <div class="secure-lbl">
+    <span class="dot"></span>
+    Secure Settlement
+  </div>
+</header>
+
+<main>
+  <div class="pay-wrap">
+
+    <!-- Payment form -->
+    <div class="pay-form" id="payForm">
+      <div class="pay-eyebrow">Lease &amp; Community Fee Settlement</div>
+      <h1 class="pay-title">Confirm your <em>payment</em></h1>
+      <p class="pay-sub">Review the details below and choose your payment method.</p>
+
+      <div class="amount-card">
+        <div class="amount-label">Amount to pay</div>
+        <div class="amount-value"><span class="ccy">SAR</span><span id="amountBig">0</span></div>
+        <div class="amount-desc" id="amountDesc">—</div>
+      </div>
+
+      <div class="detail-card">
+        <div class="detail-row">
+          <span class="lbl">Property</span>
+          <span class="val" id="propertyVal">—</span>
+        </div>
+        <div class="detail-row">
+          <span class="lbl">Reference</span>
+          <span class="val"><span class="mono" id="refVal">—</span></span>
+        </div>
+        <div class="detail-row">
+          <span class="lbl">Amount</span>
+          <span class="val"><span class="mono" id="amountVal">—</span></span>
+        </div>
+        <div class="detail-row">
+          <span class="lbl">Billed to</span>
+          <span class="val">Andy Thomas</span>
+        </div>
+      </div>
+
+      <label class="method-label" for="method">Payment method</label>
+      <select class="method-select" id="method">
+        <option>Visa · ending 4821</option>
+        <option>Mastercard · ending 9034</option>
+        <option>Apple Pay</option>
+        <option>Bank transfer · NCB</option>
+        <option>Add new card</option>
+      </select>
+
+      <button class="pay-btn" onclick="confirmPay()">
+        <span class="lock">🔒</span>
+        <span id="payBtnText">Pay now</span>
+      </button>
+
+      <p class="terms">
+        This is a secure settlement link provided by Reserve Living. Your payment is protected.<br/>
+        By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.
+      </p>
+    </div>
+
+    <!-- Success state -->
+    <div class="success-card" id="successCard">
+      <div class="success-icon">✓</div>
+      <h2 class="success-title">Payment confirmed</h2>
+      <p class="success-sub">Your settlement has been received. A receipt has been sent to your email.</p>
+
+      <div class="success-amt"><span class="ccy">SAR</span><span id="successAmt">0</span></div>
+
+      <div class="success-details">
+        <div class="detail-row">
+          <span class="lbl">Reference</span>
+          <span class="val"><span class="mono" id="successRef">—</span></span>
+        </div>
+        <div class="detail-row">
+          <span class="lbl">Property</span>
+          <span class="val" id="successProp">—</span>
+        </div>
+        <div class="detail-row">
+          <span class="lbl">Status</span>
+          <span class="val" style="color:var(--success);font-weight:600;">✓ Settled</span>
+        </div>
+        <div class="detail-row">
+          <span class="lbl">Date</span>
+          <span class="val" id="successDate">—</span>
+        </div>
+      </div>
+
+      <a class="back-btn" href="index.html">
+        ← Back to Reserve Living
+      </a>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  function getParam(name) {
+    var m = new RegExp('[?&]' + name + '=([^&]*)').exec(window.location.search);
+    return m ? decodeURIComponent(m[1].replace(/\+/g, ' ')) : '';
+  }
+
+  var ref    = getParam('ref')    || 'RSG-2026-MAY-Q2';
+  var amount = getParam('amount') || '0';
+  var label  = getParam('label')  || 'Lease &amp; Community Fee';
+
+  function fmt(n) {
+    return Number(n).toLocaleString('en-US');
+  }
+
+  document.getElementById('amountBig').textContent  = fmt(amount);
+  document.getElementById('amountVal').textContent  = 'SAR ' + fmt(amount);
+  document.getElementById('amountDesc').textContent = label;
+  document.getElementById('propertyVal').textContent = label;
+  document.getElementById('refVal').textContent     = ref;
+  document.getElementById('payBtnText').textContent = 'Pay SAR ' + fmt(amount);
+
+  document.title = 'Pay SAR ' + fmt(amount) + ' · Reserve Living';
+
+  document.getElementById('successAmt').textContent  = fmt(amount);
+  document.getElementById('successRef').textContent  = ref;
+  document.getElementById('successProp').textContent = label;
+
+  var today = new Date();
+  var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  var dateStr = today.getDate() + ' ' + months[today.getMonth()] + ' ' + today.getFullYear();
+  document.getElementById('successDate').textContent = dateStr;
+
+  function confirmPay() {
+    var btn = document.querySelector('.pay-btn');
+    btn.disabled = true;
+    btn.style.opacity = '0.6';
+    btn.style.cursor = 'wait';
+    document.getElementById('payBtnText').textContent = 'Processing…';
+
+    setTimeout(function() {
+      document.getElementById('payForm').classList.add('hide');
+      document.getElementById('successCard').classList.add('show');
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    }, 1200);
+  }
+</script>
+
+</body>
+</html>
